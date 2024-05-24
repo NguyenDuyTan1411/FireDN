@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "Temperature";
+}
+
+<h2>Temperature Data</h2>
+<p>Here you can view temperature data.</p>
+
+<!-- Add a canvas element for Chart.js -->
+<canvas id="temperatureChart"></canvas>
+
+<!-- Include script to fetch and display temperature data -->
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var ctx = document.getElementById('temperatureChart').getContext('2d');
+            var temperatureChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [], // Your labels here
+                    datasets: [{
+                        label: 'Temperature',
+                        data: [], // Your data here
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'second'
+                            },
+                            grid: {
+                                display: true
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                display: true
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Function to fetch data (you need to implement actual data fetching)
+            function fetchData() {
+                // Replace with your data fetching logic
+                var now = new Date();
+                var temperature = 25 + Math.random() * 5; // Example temperature data
+                temperatureChart.data.labels.push(now);
+                temperatureChart.data.datasets[0].data.push(temperature);
+
+                // Limit the number of data points
+                if (temperatureChart.data.labels.length > 10) {
+                    temperatureChart.data.labels.shift();
+                    temperatureChart.data.datasets[0].data.shift();
+                }
+
+                temperatureChart.update();
+            }
+
+            // Fetch data every 2 seconds
+            setInterval(fetchData, 2000);
+        });
+    </script>
+}

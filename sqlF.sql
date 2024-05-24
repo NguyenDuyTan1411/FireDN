@@ -1,0 +1,104 @@
+﻿-- Tạo cơ sở dữ liệu FireKL
+CREATE DATABASE FireKL;
+GO
+
+-- Sử dụng cơ sở dữ liệu FireKL
+USE FireKL;
+GO
+
+-- Tạo bảng Sensor
+CREATE TABLE Sensor (
+    ID INT PRIMARY KEY,
+    Sensor_N NVARCHAR(255),
+);
+
+-- Tạo bảng TG_Sensor
+CREATE TABLE TG_Sensor (
+    TG_SID INT,
+    Esp_ID INT,
+);
+
+-- Tạo bảng ESP
+CREATE TABLE ESP (
+    Esp_ID INT PRIMARY KEY,
+    Esp_N NVARCHAR(255),
+);
+
+-- Tạo bảng TG_ESP
+CREATE TABLE TG_ESP (
+    Esp_ID INT,
+    FireD_ID INT,
+    Humi_ID INT,
+    Temp_ID INT,
+    Smoke_ID INT,
+    Record DATETIME,
+    Alerts NVARCHAR(255),
+);
+
+-- Tạo bảng Humi
+CREATE TABLE Humi (
+    ID INT PRIMARY KEY,
+    Humi_ID INT,
+    Statistic NVARCHAR(255),
+    ReadTime DATETIME,
+);
+
+-- Tạo bảng FireD
+CREATE TABLE FireD (
+    ID INT PRIMARY KEY,
+    FireD_ID INT,
+    Statistic NVARCHAR(255),
+    ReadTime DATETIME,
+);
+
+-- Tạo bảng Temp
+CREATE TABLE Temp (
+    ID INT PRIMARY KEY,
+    Temp_ID INT,
+    Statistic NVARCHAR(255),
+    ReadTime DATETIME,
+);
+
+-- Tạo bảng Smoke
+CREATE TABLE Smoke (
+    ID INT PRIMARY KEY,
+    Smoke_ID INT,
+    Statistic NVARCHAR(255),
+    ReadTime DATETIME,
+);
+
+ALTER TABLE TG_Sensor 
+ADD CONSTRAINT FK_esp_id
+FOREIGN KEY (Esp_ID)
+REFERENCES ESP(Esp_ID)
+
+ALTER TABLE TG_Sensor 
+ADD CONSTRAINT FK_TG_SID
+FOREIGN KEY (TG_SID)
+REFERENCES Sensor(ID)
+
+ALTER TABLE TG_ESP
+ADD CONSTRAINT FK_ESP 
+FOREIGN KEY (Esp_ID) 
+REFERENCES ESP(Esp_ID);
+
+ALTER TABLE TG_ESP
+ADD CONSTRAINT FK_FireD 
+FOREIGN KEY (FireD_ID) 
+REFERENCES FireD(ID);
+
+
+ALTER TABLE TG_ESP
+ADD CONSTRAINT FK_Humi 
+FOREIGN KEY (Humi_ID) 
+REFERENCES Humi(ID);
+
+ALTER TABLE TG_ESP
+ADD CONSTRAINT FK_Temp 
+FOREIGN KEY (Temp_ID) 
+REFERENCES Temp(ID);
+
+ALTER TABLE TG_ESP
+ADD CONSTRAINT FK_Smoke 
+FOREIGN KEY (Smoke_ID) 
+REFERENCES Smoke(ID);

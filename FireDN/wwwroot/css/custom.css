@@ -1,0 +1,4 @@
+﻿.navbar-light .navbar-nav .nav-link {
+    mix-blend-mode: difference; /* Thay đổi màu chữ tự động */
+    color: white; /* Màu chữ mặc định nếu không thể thay đổi */
+}

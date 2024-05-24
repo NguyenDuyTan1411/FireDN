@@ -1,0 +1,273 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Panel</title>
+    <!-- Bootstrap 3.3.7 -->
+    @* <link rel="stylesheet" href="~/css/Content/adminlte/components/bootstrap/dist/css/bootstrap.min.css"> *@
+    <!-- Font Awesome -->
+    @* <link rel="stylesheet" href="~/css/Content/adminlte/components/font-awesome/css/font-awesome.min.css"> *@
+    <!-- Ionicons -->
+    @* <link rel="stylesheet" href="~/css/Content/adminlte/components/Ionicons/css/ionicons.min.css"> *@
+    <!-- Theme style -->
+    @* <link rel="stylesheet" href="~/css/Content/adminlte/dist/css/AdminLTE.min.css"> *@
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="~/css/Content/adminlte/dist/css/skins/_all-skins.min.css">
+    <!-- Morris chart -->
+    <link rel="stylesheet" href="~/css/Content/adminlte/components/morris.js/morris.css">
+    <!-- jvectormap -->
+    <link rel="stylesheet" href="~/css/Content/adminlte/components/jvectormap/jquery-jvectormap.css">
+    <!-- Date Picker -->
+    <link rel="stylesheet" href="~/css/Content/adminlte/components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="~/css/Content/adminlte/components/bootstrap-daterangepicker/daterangepicker.css">
+    <!-- bootstrap wysihtml5 - text editor -->
+    <link rel="stylesheet" href="~/css/Content/adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+    <link rel="stylesheet" href="~/css/all.css" />
+    @* <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" /> *@
+    @* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" /> *@
+    @* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.1.0/css/adminlte.min.css" /> *@
+    @* <link rel="stylesheet" href="~/css/custom.css" /> *@
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+</head>
+<body>
+    <!-- Main content -->
+    <section class="content">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 id ="temperature">Temperature: </h3>
+                        <p>Loading...</p> <!-- Gắn ID vào -->
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-thermometer-half"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">Setting <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3 id ="humidity">Humidity: </h3>
+                        <p>Loading...</p> <!-- Gắn ID vào -->
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">Setting <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3 id="fireD">Fire: </h3>
+                        <p>Loading...</p> <!-- Gắn ID vào -->
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">Setting <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-gray">
+                    <div class="inner">
+                        <h3 id="smoke">Smoke:</h3>
+                        <p>Loading...</p> <!-- Gắn ID vào -->
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">Setting <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3 id="status">Status: </h3>
+                        <p>Loading...</p> <!-- Gắn ID vào -->
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">Setting <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="container">
+                <div class="button-group">
+                    <button onclick="sendCommand('start')">Start</button>
+                    <button onclick="sendCommand('stop')">Stop</button>
+                    <button onclick="sendCommand('save')">Save</button>
+                    <button onclick="sendCommand('stopsave')">Stop Save</button>
+                </div>
+                <button id="autoUpdateButton" onclick="toggleAutoUpdate()">Toggle Auto Update</button>
+
+            </div>
+            </div>
+            <!-- ./col -->
+      
+       </section>
+    <style>
+        #lineChart {
+            width: 800px !important;
+            height: 400px !important;
+        }
+
+    </style>
+    <canvas id="lineChart"></canvas>
+   
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var chart;
+        var labels = [];
+        var temperatureData = [];
+        var humidityData = [];
+        var maxDataPoints = 30;
+        var autoUpdate = false; // Biến cờ kiểm soát cập nhật tự động
+
+        async function sendCommand(command) {
+            try {
+                const response = await fetch('/api/control', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `command=${command}`
+                });
+
+                if (response.ok) {
+                    updateStatus();
+                } else {
+                    alert('Failed to send command');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error sending command');
+            }
+        }
+
+        async function updateStatus() {
+            try {
+                const response = await fetch('/api/control');
+                if (response.ok) {
+                    const status = await response.text();
+                    document.getElementById('status').innerText = `Current Status: ${status}`;
+                } else {
+                    document.getElementById('status').innerText = 'Failed to fetch status';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('status').innerText = 'Error fetching status';
+            }
+        }
+
+        async function updateData() {
+            try {
+                const response = await fetch('/api/data');
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('temperature').innerText = `Temperature: ${data.temperature}°C`;
+                    document.getElementById('humidity').innerText = `Humidity: ${data.humidity}%`;
+
+                    // Thêm dữ liệu mới vào cuối mảng và loại bỏ dữ liệu cũ ở đầu mảng nếu đạt giới hạn
+                    temperatureData.push(data.temperature);
+                    humidityData.push(data.humidity);
+                    if (temperatureData.length > maxDataPoints) {
+                        temperatureData.shift();
+                        humidityData.shift();
+                        labels.shift();
+                    }
+
+                    // Tạo nhãn mới cho trục x
+                    const now = new Date();
+                    const timeString = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+                    labels.push(timeString);
+
+                    return { temperatureData, humidityData };
+                } else {
+                    console.error('Failed to fetch Arduino data');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function drawLineChart() {
+            var ctx = document.getElementById('lineChart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Temperature (°C)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1,
+                        data: temperatureData
+                    },
+                    {
+                        label: 'Humidity (%)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                        data: humidityData
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateChart() {
+            chart.data.labels = labels;
+            chart.data.datasets[0].data = temperatureData;
+            chart.data.datasets[1].data = humidityData;
+            chart.update();
+        }
+
+        async function fetchDataAndDrawChart() {
+            if (autoUpdate) { // Kiểm tra biến cờ trước khi cập nhật
+                const data = await updateData();
+                if (data) {
+                    if (!chart) {
+                        drawLineChart(); // Khởi tạo biểu đồ lần đầu
+                    } else {
+                        updateChart(); // Cập nhật dữ liệu và vẽ lại biểu đồ
+                    }
+                }
+            }
+        }
+
+        // Hàm này được gọi khi người dùng nhấn nút để bật/tắt cập nhật tự động
+        function toggleAutoUpdate() {
+            autoUpdate = !autoUpdate;
+            document.getElementById('autoUpdateButton').innerText = autoUpdate ? 'Disable Auto Update' : 'Enable Auto Update';
+            fetchDataAndDrawChart(); // Gọi hàm để cập nhật biểu đồ ngay lập tức nếu tự động bật
+        }
+
+        // Khởi tạo biểu đồ một lần đầu tiên
+        fetchDataAndDrawChart();
+        setInterval(fetchDataAndDrawChart, 4000);
+    </script>
+</body>
+</html>
